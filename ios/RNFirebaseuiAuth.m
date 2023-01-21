@@ -203,9 +203,17 @@ didSignInWithAuthDataResult:(nullable FIRAuthDataResult *)authDataResult
          error:(nullable NSError *)error{
     if (error) {
         if (error.code == FUIAuthErrorCodeUserCancelledSignIn) {
-            self._reject(ERROR_USER_CANCELLED, @"User cancelled the sign-in process", error);
+            if (self._reject) {
+                self._reject(ERROR_USER_CANCELLED, @"User cancelled the sign-in process", error);
+                self._reject = nil;
+                self._resolve = nil;
+            }
         } else {
-            self._reject(ERROR_FIREBASE, error.localizedDescription, error);
+            if (self._reject) {
+                self._reject(ERROR_FIREBASE, error.localizedDescription, error);
+                self._reject = nil;
+                self._resolve = nil;
+            }
         }
         return;
     }
@@ -217,7 +225,11 @@ didSignInWithAuthDataResult:(nullable FIRAuthDataResult *)authDataResult
         if (hasListeners) {
             [self sendEventWithName:AUTH_STATE_CHANGED_EVENT body:@{@"user": authResultDict}];
         }
-        self._resolve(authResultDict);
+        if (self._resolve) {
+            self._resolve(authResultDict);
+            self._reject = nil;
+            self._resolve = nil;
+        }
         return;
     }
 }
