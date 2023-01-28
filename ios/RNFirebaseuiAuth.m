@@ -196,6 +196,21 @@ RCT_EXPORT_METHOD(deleteUser:(RCTPromiseResolveBlock)resolve
     }];
 }
 
+RCT_EXPORT_METHOD(getCurrentUserToken:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    FIRUser *user = self.authUI.auth.currentUser;
+    if (user) {
+        [user getIDTokenWithCompletion:^(NSString * _Nullable token, NSError * _Nullable error) {
+            if (error) {
+                reject(ERROR_FIREBASE, @"Get token error", error);
+                return;
+            }
+            resolve(token);
+        }];
+    }
+}
+
 #pragma mark override
 
 - (void)authUI:(FUIAuth *)authUI

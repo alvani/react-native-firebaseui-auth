@@ -32,6 +32,7 @@ declare namespace RNFirebaseuiAuth {
   export function getCurrentUser(): Promise<User|null>;
   export function signOut(): Promise<boolean>;
   export function deleteUser(): Promise<boolean>;
+  export function getCurrentUserToken(): Promise<string|null>;
 
   export const AuthEventEmitter: NativeEventEmitter;
 
