@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -211,6 +212,27 @@ public class RNFirebaseuiAuthModule extends ReactContextBaseJavaModule {
                 promise.reject(ERROR_FIREBASE, e.getMessage(), e);
               }
             });
+  }
+
+  @ReactMethod
+  public void getCurrentUserToken(final Promise promise) {
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    if (user != null) {
+      user.getIdToken(false)
+        .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+          public void onComplete(@NonNull Task<GetTokenResult> task) {
+            promise.resolve(task.getResult().getToken());
+          }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+          @Override
+          public void onFailure(@NonNull Exception e) {
+            promise.reject(ERROR_FIREBASE, e.getMessage(), e);
+          }
+        });
+      return;
+    }
+    promise.resolve(null);
   }
 
   private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
