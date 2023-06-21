@@ -18,16 +18,6 @@ Pod::Spec.new do |s|
 
   s.dependency "React"
   #s.dependency "others"
-  s.dependency 'FirebaseDatabaseUI'
-  s.dependency 'FirebaseAuthUI'
-  s.dependency 'FirebaseFirestoreUI'
-  s.dependency 'FirebaseOAuthUI'
-  s.dependency 'FirebasePhoneAuthUI'
-  s.dependency 'FirebaseAnonymousAuthUI'
-  s.dependency 'FirebaseEmailAuthUI'
-  s.dependency 'FirebaseFacebookAuthUI'
-  s.dependency 'FirebaseGoogleAuthUI'
-  s.dependency 'FirebaseStorageUI'
 
 end
 
